@@ -6,6 +6,9 @@ Inspired by classic 3D platformers (*Super Mario 64*, *Super Mario Galaxy*, and 
 
 ---
 
+# Screen Shots
+![Mario 3D ](Assets\Capture.PNG)
+
 ## 🌟 Upgraded Features & Mechanics
 
 - **Fluid 360° Mario Kinematics**:
