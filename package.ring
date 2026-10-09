@@ -6,7 +6,7 @@ aPackageInfo = [
     :email = "azzeddine.remmal@gmail.com",
     :license = "MIT License",
     :version = "1.0.0",
-    :ringversion = "1.21",
+    :ringversion = "1.27",
     :versions = [
         [
             :version = "1.0.0",
@@ -19,7 +19,7 @@ aPackageInfo = [
     ],
     :libs = [
         [
-            :name = "raylib",
+            :name = "ringraylib",
             :version = "1.0.49",
             :providerusername = ""
         ]
