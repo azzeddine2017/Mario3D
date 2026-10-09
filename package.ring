@@ -1,6 +1,6 @@
 aPackageInfo = [
     :name = "Mario3D",
-    :description = "Super Mario 3D - Mushroom Kingdom 3D Platformer Adventure using Ring and RayLib",
+    :description = "Super Mario 3D - Mushroom Kingdom 3D Platformer Adventure using RingRayLib",
     :folder = "Mario3D",
     :developer = "Azzeddine2017",
     :email = "azzeddine.remmal@gmail.com",
