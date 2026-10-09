@@ -173,10 +173,10 @@ class MarioAudioManager
 
         # Try World theme first, then Title theme
         musicPath = ""
-        if fexists("Assets/music/1-07. World 2.mp3")
-            musicPath = "Assets/music/1-07. World 2.mp3"
-        elseif fexists("Assets/music/02. Title Theme.mp3")
-            musicPath = "Assets/music/02. Title Theme.mp3"
+        if fexists("Assets/music/World2.mp3")
+            musicPath = "Assets/music/World2.mp3"
+        elseif fexists("Assets/music/Title_Theme.mp3")
+            musicPath = "Assets/music/Title_Theme.mp3"
         ok
 
         if musicPath != ""

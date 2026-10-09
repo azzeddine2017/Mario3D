@@ -25,8 +25,8 @@ aPackageInfo = [
         ]
     ],
     :files = [
-        "Assets/music/02. Title Theme.mp3",
-		"Assets/music/1-07. World 2.mp3",
+        "Assets/music/Title_Theme.mp3",
+		"Assets/music/World2.mp3",
 		"Assets/sounds/course_clear.fs.32.wav",
 		"Assets/sounds/SE_BOSS_CMN_STOMPED.wav",
 		"Assets/sounds/SE_VOC_MA_TYUKAN.wav",
