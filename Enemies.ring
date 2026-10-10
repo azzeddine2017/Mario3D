@@ -120,7 +120,7 @@ class GoombaEnemy
         DrawCylinder(Vector3(pos.x, groundY + 0.05, pos.z), radius * sFactor, radius * sFactor, 0.03, 12, cShadow)
     end
 
-    func draw
+    func draw texMgr
         if !isAlive return ok
         baseY = pos.y
 
@@ -156,22 +156,28 @@ class GoombaEnemy
         DrawSphere(Vector3(pos.x, headY + 0.18, pos.z), 0.42, GOOMBA_BROWN)
 
         # 4. Expressive Eyes & Angry Brows Facing Direction
-        eLx = pos.x + fwdX * 0.46 - rgtX * 0.16
-        eLz = pos.z + fwdZ * 0.46 - rgtZ * 0.16
-        eRx = pos.x + fwdX * 0.46 + rgtX * 0.16
-        eRz = pos.z + fwdZ * 0.46 + rgtZ * 0.16
-        DrawSphere(Vector3(eLx, headY + 0.08, eLz), 0.10, WHITE)
-        DrawSphere(Vector3(eRx, headY + 0.08, eRz), 0.10, WHITE)
-        DrawSphere(Vector3(eLx + fwdX * 0.03, headY + 0.08, eLz + fwdZ * 0.03), 0.05, BLACK)
-        DrawSphere(Vector3(eRx + fwdX * 0.03, headY + 0.08, eRz + fwdZ * 0.03), 0.05, BLACK)
+        if texMgr != null and texMgr.modelGoombaFace != null
+            faceX = pos.x + fwdX * 0.48
+            faceZ = pos.z + fwdZ * 0.48
+            texMgr.drawGoombaFace(Vector3(faceX, headY + 0.06, faceZ), facingAngle)
+        else
+            eLx = pos.x + fwdX * 0.46 - rgtX * 0.16
+            eLz = pos.z + fwdZ * 0.46 - rgtZ * 0.16
+            eRx = pos.x + fwdX * 0.46 + rgtX * 0.16
+            eRz = pos.z + fwdZ * 0.46 + rgtZ * 0.16
+            DrawSphere(Vector3(eLx, headY + 0.08, eLz), 0.10, WHITE)
+            DrawSphere(Vector3(eRx, headY + 0.08, eRz), 0.10, WHITE)
+            DrawSphere(Vector3(eLx + fwdX * 0.03, headY + 0.08, eLz + fwdZ * 0.03), 0.05, BLACK)
+            DrawSphere(Vector3(eRx + fwdX * 0.03, headY + 0.08, eRz + fwdZ * 0.03), 0.05, BLACK)
 
-        # Eyebrows
-        DrawCube(Vector3(eLx, headY + 0.20, eLz), 0.20, 0.05, 0.08, BLACK)
-        DrawCube(Vector3(eRx, headY + 0.20, eRz), 0.20, 0.05, 0.08, BLACK)
+            # Eyebrows
+            DrawCube(Vector3(eLx, headY + 0.20, eLz), 0.20, 0.05, 0.08, BLACK)
+            DrawCube(Vector3(eRx, headY + 0.20, eRz), 0.20, 0.05, 0.08, BLACK)
 
-        # Fangs
-        DrawSphere(Vector3(pos.x + fwdX * 0.46 - rgtX * 0.12, headY - 0.15, pos.z + fwdZ * 0.46 - rgtZ * 0.12), 0.05, WHITE)
-        DrawSphere(Vector3(pos.x + fwdX * 0.46 + rgtX * 0.12, headY - 0.15, pos.z + fwdZ * 0.46 + rgtZ * 0.12), 0.05, WHITE)
+            # Fangs
+            DrawSphere(Vector3(pos.x + fwdX * 0.46 - rgtX * 0.12, headY - 0.15, pos.z + fwdZ * 0.46 - rgtZ * 0.12), 0.05, WHITE)
+            DrawSphere(Vector3(pos.x + fwdX * 0.46 + rgtX * 0.12, headY - 0.15, pos.z + fwdZ * 0.46 + rgtZ * 0.12), 0.05, WHITE)
+        ok
     end
 end
 
@@ -298,8 +304,12 @@ class KoopaEnemy
 
         if isShell
             sRad = 0.58
-            DrawSphere(Vector3(pos.x, baseY + 0.45, pos.z), sRad, KOOPA_GREEN)
-            DrawSphere(Vector3(pos.x, baseY + 0.52, pos.z), sRad * 0.85, KOOPA_SHELL_DARK)
+            if texMgr != null and texMgr.modelKoopaShell != null
+                texMgr.drawKoopaShell(Vector3(pos.x, baseY + 0.45, pos.z), sRad)
+            else
+                DrawSphere(Vector3(pos.x, baseY + 0.45, pos.z), sRad, KOOPA_GREEN)
+                DrawSphere(Vector3(pos.x, baseY + 0.52, pos.z), sRad * 0.85, KOOPA_SHELL_DARK)
+            ok
             DrawCylinder(Vector3(pos.x, baseY + 0.18, pos.z), sRad * 1.05, sRad * 1.05, 0.15, 16, CASTLE_WHITE)
             return
         ok
@@ -320,8 +330,12 @@ class KoopaEnemy
         DrawSphere(Vector3(fRx, baseY + 0.14, fRz), 0.20, KOOPA_YELLOW)
 
         # 2. Green Shell Body
-        DrawSphere(Vector3(pos.x, baseY + 0.65, pos.z), 0.56, KOOPA_GREEN)
-        DrawSphere(Vector3(pos.x - fwdX * 0.12, baseY + 0.70, pos.z - fwdZ * 0.12), 0.48, KOOPA_SHELL_DARK)
+        if texMgr != null and texMgr.modelKoopaShell != null
+            texMgr.drawKoopaShell(Vector3(pos.x, baseY + 0.65, pos.z), 0.56)
+        else
+            DrawSphere(Vector3(pos.x, baseY + 0.65, pos.z), 0.56, KOOPA_GREEN)
+            DrawSphere(Vector3(pos.x - fwdX * 0.12, baseY + 0.70, pos.z - fwdZ * 0.12), 0.48, KOOPA_SHELL_DARK)
+        ok
         DrawCylinder(Vector3(pos.x, baseY + 0.38, pos.z), 0.62, 0.62, 0.16, 16, CASTLE_WHITE)
 
         # 3. Yellow Head & Big Snout Facing Movement Direction
@@ -891,7 +905,7 @@ class EnemyManager
     end
 
     func draw texMgr
-        for i = 1 to len(goombas) goombas[i].draw() next
+        for i = 1 to len(goombas) goombas[i].draw(texMgr) next
         for i = 1 to len(koopas) koopas[i].draw(texMgr) next
         for i = 1 to len(piranhas) piranhas[i].draw() next
         for i = 1 to len(thwomps) thwomps[i].draw() next

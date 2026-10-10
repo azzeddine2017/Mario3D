@@ -905,12 +905,16 @@ class MarioWorld
             pr = pip[4]
             ph = pip[5]
 
-            DrawCylinder(Vector3(px, py + ph * 0.45, pz), pr * 0.90, pr * 0.90, ph * 0.90, 24, PIPE_GREEN)
-            DrawCylinderWires(Vector3(px, py + ph * 0.45, pz), pr * 0.90, pr * 0.90, ph * 0.90, 24, PIPE_DARK)
-            lipH = 0.52
-            lipY = py + ph - lipH / 2.0
-            DrawCylinder(Vector3(px, lipY, pz), pr * 1.10, pr * 1.10, lipH, 24, PIPE_GREEN)
-            DrawCylinder(Vector3(px, py + ph + 0.02, pz), pr * 0.75, pr * 0.75, 0.06, 24, BLACK)
+            if texMgr != null
+                texMgr.drawPipe(px, py, pz, pr, ph)
+            else
+                DrawCylinder(Vector3(px, py + ph * 0.45, pz), pr * 0.90, pr * 0.90, ph * 0.90, 24, PIPE_GREEN)
+                DrawCylinderWires(Vector3(px, py + ph * 0.45, pz), pr * 0.90, pr * 0.90, ph * 0.90, 24, PIPE_DARK)
+                lipH = 0.52
+                lipY = py + ph - lipH / 2.0
+                DrawCylinder(Vector3(px, lipY, pz), pr * 1.10, pr * 1.10, lipH, 24, PIPE_GREEN)
+                DrawCylinder(Vector3(px, py + ph + 0.02, pz), pr * 0.75, pr * 0.75, 0.06, 24, BLACK)
+            ok
         next
 
         # 12. Mushroom Kingdom Trees
