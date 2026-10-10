@@ -4,97 +4,58 @@
 #===================================================================#
 
 class MarioPlayer
-    pos
-    vel
-    facingAngle         # Angle in degrees (0 = +Z, 90 = +X, etc.)
-    targetAngle
-    isOnGround
-    isGrounded
-    isJumping
-    jumpHoldTimer
-    jumpCount           # 1 = single jump, 2 = double leap, 3 = triple somersault
-    doubleJumpGrace     # Window to trigger next jump combo
-    runCycle            # Phase accumulator for limb swinging
-    moveSpeed           # Current horizontal planar speed
-    isSkidding
-    isDead
-    score
+    # Core Spatial & Kinematic Attributes
+    pos              = null
+    vel              = null
+    facingAngle      = 0.0      # Heading angle in degrees
+    targetAngle      = 0.0
+    isOnGround       = false
+    isGrounded       = false
+    isJumping        = false
+    jumpHoldTimer    = 0.0
+    jumpCount        = 1        # 1 = standard, 2 = double leap, 3 = somersault
+    doubleJumpGrace  = 0.0      # Jump combo grace window
+    coyoteTimer      = 0.0      # Ledge jump assistance
+    jumpBufferTimer  = 0.0      # Input buffer window
+    runCycle         = 0.0      # Limb oscillation phase
+    moveSpeed        = 0.0      # Planar velocity magnitude
+    isSkidding       = false
+    isDead           = false
+    score            = 0
 
-    # Gameplay Attributes & Power-ups
-    health
-    maxHealth
-    coins
-    lives
-    stars
-    hasStar
-    isSuper             # Super Mushroom scale & toughness
-    scaleMultiplier     # Target scale multiplier (1.0 or 1.45)
-    currentScale        # Smoothed animated scale
-    starmanTimer        # Invincibility Star timer
-    invulnTimer
-    deathTimer
-    radius
-    flipAngle           # Somersault spin accumulator for double/triple jumps
-    blinkTimer          # Periodic eye blink accumulator
-    audioRef
+    # Gameplay Attributes & Power-Ups
+    health           = 3
+    maxHealth        = 3
+    coins            = 0
+    lives            = 3
+    stars            = 0
+    hasStar          = false
+    isSuper          = false
+    scaleMultiplier  = 1.0
+    currentScale     = 1.0
+    starmanTimer     = 0.0
+    invulnTimer      = 0.0
+    deathTimer       = 0.0
+    radius           = 0.55
+    flipAngle        = 0.0
+    blinkTimer       = 0.0
+    audioRef         = null
 
-    # Advanced Kinematics (Ground Pound, Squash & Stretch, Pipe Warping)
-    isGroundPounding    # 0 = none, 1 = air flip pause, 2 = downward slam
-    groundPoundTimer
-    squashY
-    squashXZ
-    checkpointPos       # Respawn location
-
-    # Pipe Warping State
-    isWarping           # 0 = none, 1 = entering down, 2 = exiting up
-    warpTimer
-    warpDestPos
+    # Advanced Mechanics (Ground Pound, Squash & Stretch, Warp Pipes)
+    isGroundPounding = 0        # 0 = none, 1 = air flip, 2 = slam
+    groundPoundTimer = 0.0
+    squashY          = 1.0
+    squashXZ         = 1.0
+    checkpointPos    = null
+    isWarping        = 0        # 0 = none, 1 = in, 2 = out
+    warpTimer        = 0.0
+    warpDestPos      = null
 
     func init startPos
-        pos             = Vector3(startPos.x, startPos.y, startPos.z)
-        vel             = Vector3(0.0, 0.0, 0.0)
-        facingAngle     = 0.0
-        targetAngle     = 0.0
-        isOnGround      = false
-        isGrounded      = false
-        isJumping       = false
-        jumpHoldTimer   = 0.0
-        jumpCount       = 1
-        doubleJumpGrace = 0.0
-        runCycle        = 0.0
-        moveSpeed       = 0.0
-        isSkidding      = false
-        isDead          = false
-        hasStar         = false
-        score           = 0
-
-        health          = 3
-        maxHealth       = 3
-        coins           = 0
-        lives           = 3
-        stars           = 0
-        isSuper         = false
-        scaleMultiplier = 1.0
-        currentScale    = 1.0
-        starmanTimer    = 0.0
-        invulnTimer     = 0.0
-        deathTimer      = 0.0
-        radius          = 0.55
-
-        flipAngle       = 0.0
-        blinkTimer      = 0.0
-        audioRef        = null
-
-        isGroundPounding = 0
-        groundPoundTimer = 0.0
-        squashY         = 1.0
-        squashXZ        = 1.0
-        checkpointPos   = Vector3(startPos.x, startPos.y, startPos.z)
-
-        isWarping       = 0
-        warpTimer       = 0.0
-        warpDestPos     = Vector3(0, 0, 0)
-
+        pos           = Vector3(startPos.x, startPos.y, startPos.z)
+        vel           = Vector3(0.0, 0.0, 0.0)
+        checkpointPos = Vector3(startPos.x, startPos.y, startPos.z)
+        warpDestPos   = Vector3(0.0, 0.0, 0.0)
         return self
     end
 
@@ -188,22 +149,22 @@ class MarioPlayer
             camRgt = cam.getRightVector()
 
             # Forward (W on QWERTY, Z on AZERTY, Up Arrow)
-            if IsKeyDown(KEY_W) or IsKeyDown(KEY_Z) //or IsKeyDown(KEY_UP)
+            if IsKeyDown(KEY_W) or IsKeyDown(KEY_Z) or IsKeyDown(KEY_UP)
                 inputX += camFwd[1]
                 inputZ += camFwd[2]
             ok
             # Backward (S, Down Arrow)
-            if IsKeyDown(KEY_S) //or IsKeyDown(KEY_DOWN)
+            if IsKeyDown(KEY_S) or IsKeyDown(KEY_DOWN)
                 inputX -= camFwd[1]
                 inputZ -= camFwd[2]
             ok
             # Right (D, Right Arrow)
-            if IsKeyDown(KEY_D) //or IsKeyDown(KEY_RIGHT)
+            if IsKeyDown(KEY_D) or IsKeyDown(KEY_RIGHT)
                 inputX -= camRgt[1]
                 inputZ -= camRgt[2]
             ok
-            # Left (Q on AZERTY, A on QWERTY, Left Arrow)
-            if IsKeyDown(KEY_A) or IsKeyDown(KEY_Q) //or IsKeyDown(KEY_LEFT)
+            # Left (A on QWERTY, Q on AZERTY, Left Arrow)
+            if IsKeyDown(KEY_A) or IsKeyDown(KEY_Q) or IsKeyDown(KEY_LEFT)
                 inputX += camRgt[1]
                 inputZ += camRgt[2]
             ok
@@ -228,7 +189,8 @@ class MarioPlayer
             inputZ /= inputLen
         ok
 
-        # Sprint / Run speed check (Shift key or [X] key)
+        # Sprint / Dash speed check (Shift key or [X] key)
+        # (Strictly scales horizontal max speed only, zero vertical effect)
         isRunning = IsKeyDown(KEY_LEFT_SHIFT) or IsKeyDown(KEY_RIGHT_SHIFT) or IsKeyDown(KEY_X)
         targetMaxSpeed = MARIO_WALK_SPEED
         if isRunning targetMaxSpeed = MARIO_RUN_SPEED ok
@@ -250,6 +212,10 @@ class MarioPlayer
             while angDiff > 180.0  angDiff -= 360.0 end
             while angDiff < -180.0 angDiff += 360.0 end
             facingAngle += angDiff * 14.0 * dt
+
+            # Keep facingAngle cleanly wrapped in [0, 360)
+            while facingAngle >= 360.0 facingAngle -= 360.0 end
+            while facingAngle < 0.0    facingAngle += 360.0 end
 
             # Skidding check
             hSpeed = sqrt(vel.x * vel.x + vel.z * vel.z)
@@ -277,18 +243,32 @@ class MarioPlayer
         moveSpeed = curHSpeed
 
         # -----------------------------------------------------------
-        # 3. Jump Physics & Acrobatic Triple Jump
+        # 3. Jump Physics, Coyote Time & Acrobatic Triple Jump
         # -----------------------------------------------------------
         if doubleJumpGrace > 0.0 doubleJumpGrace -= dt ok
+        if coyoteTimer > 0.0     coyoteTimer -= dt ok
+        if jumpBufferTimer > 0.0 jumpBufferTimer -= dt ok
+
+        if isOnGround
+            coyoteTimer = 0.12 # Can jump up to 0.12s after walking off a ledge
+        ok
 
         jumpPressed = IsKeyPressed(KEY_SPACE) or IsKeyPressed(KEY_J) or IsKeyPressed(KEY_K)
         jumpHeld    = IsKeyDown(KEY_SPACE)    or IsKeyDown(KEY_J)    or IsKeyDown(KEY_K)
 
-        if jumpPressed and isOnGround and isGroundPounding = 0
-            isJumping     = true
-            isOnGround    = false
-            isGrounded    = false
-            jumpHoldTimer = 0.0
+        if jumpPressed
+            jumpBufferTimer = 0.14 # Buffer jump for up to 0.14s before landing
+        ok
+
+        canJump = (isOnGround or coyoteTimer > 0.0) and isGroundPounding = 0 and !isJumping
+
+        if jumpBufferTimer > 0.0 and canJump
+            jumpBufferTimer = 0.0
+            coyoteTimer     = 0.0
+            isJumping       = true
+            isOnGround      = false
+            isGrounded      = false
+            jumpHoldTimer   = 0.0
 
             # Jump Stretch VFX
             squashY  = 1.30

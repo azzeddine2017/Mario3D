@@ -1,6 +1,6 @@
-# Super Mario 3D - Mushroom Kingdom Adventure 🍄⭐
+# Super Mario 3D Sample - Mushroom Kingdom Adventure 🍄⭐
 
-A rich, nostalgic **3D Third-Person Platformer** built from scratch using the **Ring Programming Language** and **RingRayLib 1.0.49**.
+A rich, nostalgic **3D Third-Person Platformer Sample** built from scratch using the **Ring Programming Language** and **RingRayLib 1.0.49**.
 
 Inspired by classic 3D platformers (*Super Mario 64*, *Super Mario Galaxy*, and *Super Mario 3D Land*), this game brings the Mushroom Kingdom to life with smooth 360° kinematics, responsive acrobatic jumping physics, Ground Pound mechanics, dynamic drop shadows, checkered terrains, moving lifts, functional Warp Pipes, patrolling Goombas & Koopas, Super Mushroom / Starman power-ups, and vibrant retro aesthetics.
 
@@ -13,7 +13,7 @@ Inspired by classic 3D platformers (*Super Mario 64*, *Super Mario Galaxy*, and 
 ## 🌟 Upgraded Features & Mechanics
 
 - **Fluid 360° Mario Kinematics**:
-  - Camera-relative directional movement (`W/A/S/D`).
+  - Camera-relative directional movement (`W/A/S/D` or `Arrow Keys`).
   - Sprint / Dash mechanic (`Shift` / `X`) with speed rush feel.
   - Smooth rotational slerp facing direction with sharp turn skidding and dust puff effects.
   - **Dynamic Drop Shadows**: Real-time ground shadow projection beneath Mario, Goombas, Koopas, and coins for authentic depth perception.
@@ -50,15 +50,15 @@ Inspired by classic 3D platformers (*Super Mario 64*, *Super Mario Galaxy*, and 
 
 | Action | Key / Input |
 |---|---|
-| **Move Mario** | `W` / `A` / `S` / `D` (Camera-Relative) |
+| **Move Mario** | `W` / `A` / `S` / `D` or `Arrow Keys` (Camera-Relative) |
 | **Jump / Triple Jump** | `Space` / `Z` / `J` (Time consecutive jumps for Double & Triple Jump) |
 | **Ground Pound (Hip Attack)** | `Left Ctrl` / `Right Ctrl` / `C` (while in mid-air) |
 | **Warp Down Pipe** | `S` or `Down Arrow` (standing on top of a Warp Pipe) |
 | **Sprint / Dash Fast** | Hold `Left Shift` / `Right Shift` / `X` |
 | **Kick Koopa Shell** | Walk / Run into a stationary Koopa shell |
-| **Camera Orbit** | Mouse Right-Click Drag OR Arrow Keys |
+| **Camera Orbit** | `Q` / `E` OR Mouse Right-Click Drag |
 | **Camera Zoom** | Mouse Scroll Wheel |
-| **Center Camera** | `C` or `R` |
+| **Center Camera** | `R` |
 | **Pause Game** | `ESC` or `P` |
 | **Restart / Retry** | `Enter` or `Space` (on Clear/GameOver) / `R` (in Pause) |
 
@@ -67,8 +67,8 @@ Inspired by classic 3D platformers (*Super Mario 64*, *Super Mario Galaxy*, and 
 ## 🚀 How to install and run the project
 
 ```bash
-ringpm install Mario3D from Azzeddine2017
-ringpm run Mario3D
+ringpm install Mario3D_Sample from Azzeddine2017
+ringpm run Mario3D_Sample
 ```
 
 ---

@@ -5,50 +5,34 @@
 #===================================================================#
 
 class MarioWorld
-    currentLevel        # 1 = Meadow, 2 = Lava Keep, 3 = Sky Summit
-    levelName           # String title of the stage
-    platforms           # List of 3D AABB solid platforms
-    movingPlatforms     # List of dynamic moving platforms
-    blocks              # List of Question & Brick blocks
-    coins               # List of floating 3D rotating gold coins
-    pipes               # List of Warp Pipes
-    trees               # List of Mushroom Kingdom trees
-    clouds              # List of animated sky clouds
-    mushrooms           # Giant decorative Toadstool mushrooms
-    flowers             # 3D meadow flower patches
-    fireBars            # Rotating fire chains (Level 2)
-    hasLava             # Whether stage has molten lava lake
-    lavaY               # Lava surface height
-    powerUps            # Spawning Super Mushrooms / Stars
-    bouncingCoins       # Bonus coins shooting out of bumped blocks
-    starPos             # Position of the goal Power Star
-    flagpolePos         # Position of classic Flagpole
-    checkpointPos       # Position of midway checkpoint
-    isCheckpointActive  # Whether checkpoint has been triggered
-    audioRef            # Sound manager reference
-    coinSpinAngle       # Coin rotation angle
+    currentLevel       = 1          # 1 = Meadow, 2 = Lava Keep, 3 = Sky Summit
+    levelName          = "WORLD 1-1: Mushroom Meadow"
+    coinSpinAngle      = 0.0
+    audioRef           = null
+    hasLava            = false
+    lavaY              = -2.0
+    isCheckpointActive = false
+    checkpointPos      = null
+    flagpolePos        = null
+    starPos            = null
+
+    platforms          = []
+    movingPlatforms    = []
+    blocks             = []
+    coins              = []
+    pipes              = []
+    trees              = []
+    clouds             = []
+    mushrooms          = []
+    flowers            = []
+    fireBars           = []
+    powerUps           = []
+    bouncingCoins      = []
 
     func init
-        currentLevel        = 1
-        levelName           = "WORLD 1-1: Mushroom Meadow"
-        coinSpinAngle       = 0.0
-        audioRef            = null
-        platforms           = []
-        movingPlatforms     = []
-        blocks              = []
-        coins               = []
-        pipes               = []
-        trees               = []
-        clouds              = []
-        mushrooms           = []
-        flowers             = []
-        fireBars            = []
-        hasLava             = false
-        lavaY               = -2.0
-        powerUps            = []
-        bouncingCoins       = []
-        isCheckpointActive  = false
-
+        checkpointPos = Vector3(0.0, 3.0, 36.0)
+        flagpolePos   = Vector3(0.0, 13.5, 76.0)
+        starPos       = Vector3(0.0, 16.5, 76.0)
         buildLevel(1)
         return self
     end
@@ -59,94 +43,110 @@ class MarioWorld
     end
 
     func buildLevel levelNum
-        platforms           = []
-        movingPlatforms     = []
-        blocks              = []
-        coins               = []
-        pipes               = []
-        trees               = []
-        clouds              = []
-        mushrooms           = []
-        flowers             = []
-        fireBars            = []
-        powerUps            = []
-        bouncingCoins       = []
-        isCheckpointActive  = false
+        powerUps           = []
+        bouncingCoins      = []
+        isCheckpointActive = false
 
         if levelNum = 1
+            # Collectible Super Mushroom placed in meadow for immediate discovery
+            powerUps = [
+                [ -4.0, 0.5, 8.0, 0.0, 0.5, 1.0, 2 ]
+            ]
             # =======================================================
             # WORLD 1-1: MUSHROOM MEADOW (المروج الخضراء)
             # =======================================================
             levelName = "WORLD 1-1: Mushroom Meadow"
             hasLava   = false
 
-            # 1. Solid Static Platforms (x, y, z, sx, sy, sz, type)
-            # 1=Grass/Dirt, 2=Stone, 3=Mushroom Cap
-            platforms + [ 0.0, -1.0, 0.0, 36.0, 2.0, 36.0, 1 ]
-            platforms + [ -15.0, 3.2, 16.0, 4.8, 1.2, 4.8, 3 ]
-            platforms + [  17.0, 3.2,  2.0, 4.8, 1.2, 4.8, 3 ]
-            platforms + [ 0.0, -0.5, 26.0, 14.0, 3.0, 18.0, 1 ]
-            platforms + [ 0.0,  1.0, 42.0, 18.0, 4.0, 16.0, 1 ]
-            platforms + [ 14.0, 5.2, 38.0, 4.4, 1.0, 4.4, 3 ]
-            platforms + [ -12.0, 3.2, 38.0, 6.0, 1.0, 6.0, 2 ]
-            platforms + [ -10.0, 8.0, 58.0, 8.0, 1.0, 8.0, 2 ]
-            platforms + [ 0.0, 10.5, 70.0, 22.0, 6.0, 22.0, 1 ]
-            platforms + [ 28.0, 3.0, 18.0, 12.0, 2.0, 12.0, 1 ]
+            # 1. Solid Static Platforms (x, y, z, sx, sy, sz, type: 1=Grass, 2=Stone, 3=Mushroom)
+            platforms = [
+                [ 0.0, -1.0, 0.0, 36.0, 2.0, 36.0, 1 ],
+                [ -15.0, 3.2, 16.0, 4.8, 1.2, 4.8, 3 ],
+                [  17.0, 3.2,  2.0, 4.8, 1.2, 4.8, 3 ],
+                [ 0.0, -0.5, 26.0, 14.0, 3.0, 18.0, 1 ],
+                [ 0.0,  1.0, 42.0, 18.0, 4.0, 16.0, 1 ],
+                [ 14.0, 5.2, 38.0, 4.4, 1.0, 4.4, 3 ],
+                [ -12.0, 3.2, 38.0, 6.0, 1.0, 6.0, 2 ],
+                [ -10.0, 8.0, 58.0, 8.0, 1.0, 8.0, 2 ],
+                [ 0.0, 10.5, 70.0, 22.0, 6.0, 22.0, 1 ],
+                [ 28.0, 3.0, 18.0, 12.0, 2.0, 12.0, 1 ]
+            ]
 
             # 2. Dynamic Moving Platforms
-            # [x, y, z, sx, sy, sz, type, axis, range, speed, phase, baseX, baseY, baseZ]
-            movingPlatforms + [ -18.0, 5.5, 48.0, 5.0, 0.8, 5.0, 4, "z", 6.0, 1.8, 0.0, -18.0, 5.5, 48.0 ]
-            movingPlatforms + [  10.0, 6.0, 56.0, 4.5, 0.8, 4.5, 4, "y", 4.5, 1.4, 1.5,  10.0, 6.0, 56.0 ]
+            movingPlatforms = [
+                [ -18.0, 5.5, 48.0, 5.0, 0.8, 5.0, 4, "z", 6.0, 1.8, 0.0, -18.0, 5.5, 48.0 ],
+                [  10.0, 6.0, 56.0, 4.5, 0.8, 4.5, 4, "y", 4.5, 1.4, 1.5,  10.0, 6.0, 56.0 ]
+            ]
 
             # 3. Giant Toadstool Mushrooms
-            mushrooms + [ -15.0, 0.0, 16.0, 1, 2.4, 3.2 ]
-            mushrooms + [  17.0, 0.0,  2.0, 2, 2.4, 3.2 ]
-            mushrooms + [  14.0, 1.0, 38.0, 1, 2.3, 4.2 ]
+            mushrooms = [
+                [ -15.0, 0.0, 16.0, 1, 2.4, 3.2 ],
+                [  17.0, 0.0,  2.0, 2, 2.4, 3.2 ],
+                [  14.0, 1.0, 38.0, 1, 2.3, 4.2 ]
+            ]
 
             # 4. Meadow Flowers
-            flowers + [ -6.0, 0.0, -5.0, 1 ]
-            flowers + [ -8.5, 0.0, -3.0, 2 ]
-            flowers + [  6.0, 0.0, -4.0, 4 ]
-            flowers + [  8.5, 0.0, -6.0, 1 ]
-            flowers + [ -3.5, 0.0,  9.0, 2 ]
-            flowers + [  4.5, 0.0, 11.0, 3 ]
-            flowers + [ 26.0, 4.0, 15.0, 2 ]
-            flowers + [ 30.0, 4.0, 21.0, 3 ]
+            flowers = [
+                [ -6.0, 0.0, -5.0, 1 ],
+                [ -8.5, 0.0, -3.0, 2 ],
+                [  6.0, 0.0, -4.0, 4 ],
+                [  8.5, 0.0, -6.0, 1 ],
+                [ -3.5, 0.0,  9.0, 2 ],
+                [  4.5, 0.0, 11.0, 3 ],
+                [ 26.0, 4.0, 15.0, 2 ],
+                [ 30.0, 4.0, 21.0, 3 ]
+            ]
 
             # 5. Interactive Blocks [x, y, z, type, isUsed, bounceTimer, bounceY, itemType]
-            blocks + [ -3.0, 3.8, 6.0, 1, false, 0.0, 0.0, 2 ]  # Super Mushroom!
-            blocks + [ -1.0, 3.8, 6.0, 2, false, 0.0, 0.0, 1 ]  # Brick Block
-            blocks + [  1.0, 3.8, 6.0, 1, false, 0.0, 0.0, 1 ]  # Coin [?]
-            blocks + [  3.0, 3.8, 6.0, 2, false, 0.0, 0.0, 1 ]  # Brick Block
-            blocks + [ 0.0, 6.2, 6.0, 1, false, 0.0, 0.0, 3 ]   # High Starman Block!
-            blocks + [ 0.0, 4.5, 26.0, 1, false, 0.0, 0.0, 1 ]
-            blocks + [ 2.0, 4.5, 26.0, 2, false, 0.0, 0.0, 1 ]
-            blocks + [ -4.0, 14.5, 64.0, 1, false, 0.0, 0.0, 2 ]
-            blocks + [  4.0, 14.5, 64.0, 1, false, 0.0, 0.0, 1 ]
+            blocks = [
+                [ -3.0, 3.8, 6.0, 1, false, 0.0, 0.0, 2 ],  # Super Mushroom!
+                [ -1.0, 3.8, 6.0, 2, false, 0.0, 0.0, 1 ],  # Brick Block
+                [  1.0, 3.8, 6.0, 1, false, 0.0, 0.0, 1 ],  # Coin [?]
+                [  3.0, 3.8, 6.0, 2, false, 0.0, 0.0, 1 ],  # Brick Block
+                [  0.0, 6.2, 6.0, 1, false, 0.0, 0.0, 3 ],  # High Starman Block!
+                [  0.0, 4.5, 26.0, 1, false, 0.0, 0.0, 1 ],
+                [  2.0, 4.5, 26.0, 2, false, 0.0, 0.0, 1 ],
+                [ -4.0, 14.5, 64.0, 1, false, 0.0, 0.0, 2 ],
+                [  4.0, 14.5, 64.0, 1, false, 0.0, 0.0, 1 ]
+            ]
 
             # 6. Spinning Coins
-            for c = -4 to 4 step 2
-                coins + [ c * 2.0, 1.2, -6.0, false, c * 0.4 ]
-            next
-            for c = 1 to 5
-                coins + [ 0.0, 2.0 + c * 0.4, 20.0 + c * 3.5, false, c * 0.5 ]
-            next
-            coins + [ -12.0, 4.5, 38.0, false, 0.2 ]
-            coins + [ -18.0, 6.8, 48.0, false, 0.6 ]
-            coins + [ -10.0, 9.3, 58.0, false, 0.9 ]
+            # 6. Spinning Coins
+            coins = [
+                [ -8.0, 1.2, -6.0, false, -1.6 ],
+                [ -4.0, 1.2, -6.0, false, -0.8 ],
+                [  0.0, 1.2, -6.0, false,  0.0 ],
+                [  4.0, 1.2, -6.0, false,  0.8 ],
+                [  8.0, 1.2, -6.0, false,  1.6 ],
+                [  0.0, 2.4, 23.5, false,  0.5 ],
+                [  0.0, 2.8, 27.0, false,  1.0 ],
+                [  0.0, 3.2, 30.5, false,  1.5 ],
+                [  0.0, 3.6, 34.0, false,  2.0 ],
+                [  0.0, 4.0, 37.5, false,  2.5 ],
+                [ -12.0, 4.5, 38.0, false, 0.2 ],
+                [ -18.0, 6.8, 48.0, false, 0.6 ],
+                [ -10.0, 9.3, 58.0, false, 0.9 ]
+            ]
 
             # 7. Warp Pipes
-            pipes + [  12.0, 0.0, -8.0, 1.4, 2.8, 28.0, 5.2, 18.0, true ]
-            pipes + [  28.0, 4.0, 12.0, 1.4, 2.4, 12.0, 4.0, -8.0, true ]
-            pipes + [   6.0, 3.0, 42.0, 1.4, 2.6, 0.0, 0.0, 0.0, false ]
+            pipes = [
+                [  12.0, 0.0, -8.0, 1.4, 2.8, 28.0, 5.2, 18.0, true ],
+                [  28.0, 4.0, 12.0, 1.4, 2.4, 12.0, 4.0, -8.0, true ],
+                [   6.0, 3.0, 42.0, 1.4, 2.6, 0.0, 0.0, 0.0, false ]
+            ]
 
             # 8. Trees & Clouds
-            trees + [ -14.0, 0.0, -12.0, 3.5, 2.2 ]
-            trees + [  14.0, 0.0,  12.0, 4.0, 2.5 ]
-            trees + [ -14.0, 0.0,   2.0, 3.0, 2.0 ]
-            trees + [   8.0, 0.0, -14.0, 3.8, 2.4 ]
-            clouds + [ -25.0, 18.0,  10.0, 4.5, 1.2 ]
-            clouds + [  18.0, 22.0,  35.0, 6.0, 0.8 ]
+            trees = [
+                [ -14.0, 0.0, -12.0, 3.5, 2.2 ],
+                [  14.0, 0.0,  12.0, 4.0, 2.5 ],
+                [ -14.0, 0.0,   2.0, 3.0, 2.0 ],
+                [   8.0, 0.0, -14.0, 3.8, 2.4 ]
+            ]
+            clouds = [
+                [ -25.0, 18.0,  10.0, 4.5, 1.2 ],
+                [  18.0, 22.0,  35.0, 6.0, 0.8 ]
+            ]
+            fireBars = []
 
             checkpointPos = Vector3(0.0, 3.0, 36.0)
             flagpolePos   = Vector3(0.0, 13.5, 76.0)
@@ -160,47 +160,57 @@ class MarioWorld
             hasLava   = true
             lavaY     = -1.2
 
-            # 1. Volcanic Stone Platforms (Type 2 = Stone Tiles)
-            # Starting Bastion
-            platforms + [ 0.0, 0.0, 0.0, 20.0, 2.0, 20.0, 2 ]
-            # Bridge Over Boiling Lava
-            platforms + [ 0.0, 0.0, 18.0, 8.0, 2.0, 14.0, 2 ]
-            # First Island with Firebar
-            platforms + [ 0.0, 0.0, 32.0, 10.0, 2.0, 10.0, 2 ]
-            # Split Paths
-            platforms + [ -8.0, 1.5, 46.0, 6.0, 2.0, 12.0, 2 ]
-            platforms + [  8.0, 1.5, 46.0, 6.0, 2.0, 12.0, 2 ]
-            # Central Fortress Bridge
-            platforms + [ 0.0, 3.5, 58.0, 12.0, 3.0, 10.0, 2 ]
-            # Bowser Throne Peak
-            platforms + [ 0.0, 6.0, 74.0, 24.0, 5.0, 18.0, 2 ]
+            platforms = [
+                [ 0.0, 0.0, 0.0, 20.0, 2.0, 20.0, 2 ],
+                [ 0.0, 0.0, 18.0, 8.0, 2.0, 14.0, 2 ],
+                [ 0.0, 0.0, 32.0, 10.0, 2.0, 10.0, 2 ],
+                [ -8.0, 1.5, 46.0, 6.0, 2.0, 12.0, 2 ],
+                [  8.0, 1.5, 46.0, 6.0, 2.0, 12.0, 2 ],
+                [ 0.0, 3.5, 58.0, 12.0, 3.0, 10.0, 2 ],
+                [ 0.0, 6.0, 74.0, 24.0, 5.0, 18.0, 2 ]
+            ]
 
-            # 2. Sinking & Rising Magma Lifts
-            movingPlatforms + [ 0.0, 2.0, 46.0, 4.5, 0.8, 4.5, 4, "y", 3.2, 1.8, 0.0, 0.0, 2.0, 46.0 ]
-            movingPlatforms + [ -12.0, 4.0, 64.0, 4.5, 0.8, 4.5, 4, "z", 5.0, 2.0, 1.2, -12.0, 4.0, 64.0 ]
-            movingPlatforms + [  12.0, 4.0, 64.0, 4.5, 0.8, 4.5, 4, "z", 5.0, 2.0, 2.4,  12.0, 4.0, 64.0 ]
+            movingPlatforms = [
+                [ 0.0, 2.0, 46.0, 4.5, 0.8, 4.5, 4, "y", 3.2, 1.8, 0.0, 0.0, 2.0, 46.0 ],
+                [ -12.0, 4.0, 64.0, 4.5, 0.8, 4.5, 4, "z", 5.0, 2.0, 1.2, -12.0, 4.0, 64.0 ],
+                [  12.0, 4.0, 64.0, 4.5, 0.8, 4.5, 4, "z", 5.0, 2.0, 2.4,  12.0, 4.0, 64.0 ]
+            ]
 
-            # 3. Rotating Fire Bars [centerX, centerY, centerZ, length, speed, currentAngle]
-            fireBars + [ 0.0, 1.5, 32.0, 4.2, 1.8, 0.0 ]
-            fireBars + [ 0.0, 5.0, 58.0, 5.0, -2.2, 1.5 ]
+            fireBars = [
+                [ 0.0, 1.5, 32.0, 4.2, 1.8, 0.0 ],
+                [ 0.0, 5.0, 58.0, 5.0, -2.2, 1.5 ]
+            ]
 
-            # 4. Interactive Blocks (Iron & Power-Ups)
-            blocks + [ -3.0, 4.5, 0.0, 1, false, 0.0, 0.0, 2 ]  # Super Mushroom
-            blocks + [  3.0, 4.5, 0.0, 1, false, 0.0, 0.0, 3 ]  # Starman
-            blocks + [ -2.0, 4.0, 18.0, 2, false, 0.0, 0.0, 1 ]
-            blocks + [  2.0, 4.0, 18.0, 2, false, 0.0, 0.0, 1 ]
-            blocks + [ 0.0, 7.5, 58.0, 1, false, 0.0, 0.0, 2 ]
+            blocks = [
+                [ -3.0, 4.5, 0.0, 1, false, 0.0, 0.0, 2 ],
+                [  3.0, 4.5, 0.0, 1, false, 0.0, 0.0, 3 ],
+                [ -2.0, 4.0, 18.0, 2, false, 0.0, 0.0, 1 ],
+                [  2.0, 4.0, 18.0, 2, false, 0.0, 0.0, 1 ],
+                [  0.0, 7.5, 58.0, 1, false, 0.0, 0.0, 2 ]
+            ]
 
-            # 5. Coins
-            for c = 1 to 6
-                coins + [ 0.0, 2.0, 12.0 + c * 3.0, false, c * 0.4 ]
-            next
-            coins + [ -8.0, 3.5, 46.0, false, 0.2 ]
-            coins + [  8.0, 3.5, 46.0, false, 0.5 ]
-            for a = 0 to 5
-                ang = a * 60.0 * DEG2RAD
-                coins + [ cos(ang) * 5.5, 9.5, 74.0 + sin(ang) * 5.5, false, a * 0.3 ]
-            next
+            coins = [
+                [  0.0, 2.0, 15.0, false, 0.4 ],
+                [  0.0, 2.0, 18.0, false, 0.8 ],
+                [  0.0, 2.0, 21.0, false, 1.2 ],
+                [  0.0, 2.0, 24.0, false, 1.6 ],
+                [  0.0, 2.0, 27.0, false, 2.0 ],
+                [  0.0, 2.0, 30.0, false, 2.4 ],
+                [ -8.0, 3.5, 46.0, false, 0.2 ],
+                [  8.0, 3.5, 46.0, false, 0.5 ],
+                [  5.50, 9.5, 74.00, false, 0.0 ],
+                [  2.75, 9.5, 78.76, false, 0.3 ],
+                [ -2.75, 9.5, 78.76, false, 0.6 ],
+                [ -5.50, 9.5, 74.00, false, 0.9 ],
+                [ -2.75, 9.5, 69.24, false, 1.2 ],
+                [  2.75, 9.5, 69.24, false, 1.5 ]
+            ]
+
+            mushrooms = []
+            flowers   = []
+            trees     = []
+            clouds    = []
+            pipes     = []
 
             checkpointPos = Vector3(0.0, 2.0, 32.0)
             flagpolePos   = Vector3(0.0, 9.0, 78.0)
@@ -213,44 +223,63 @@ class MarioWorld
             levelName = "WORLD 1-3: Sky Cloud Summit"
             hasLava   = false
 
-            # High Elevation Floating Island Steps
-            platforms + [ 0.0, 0.0, 0.0, 16.0, 1.5, 16.0, 1 ]
-            platforms + [ -10.0, 2.5, 16.0, 7.0, 1.2, 7.0, 3 ] # Bouncy Mushroom Cap
-            platforms + [  10.0, 2.5, 16.0, 7.0, 1.2, 7.0, 3 ]
-            platforms + [ 0.0, 4.5, 28.0, 12.0, 1.5, 12.0, 1 ]
-            platforms + [ -8.0, 7.0, 42.0, 6.0, 1.0, 6.0, 2 ]
-            platforms + [  8.0, 9.5, 54.0, 6.0, 1.0, 6.0, 2 ]
-            platforms + [ 0.0, 12.0, 68.0, 18.0, 2.0, 18.0, 1 ] # Final Sky Sanctuary
+            platforms = [
+                [ 0.0, 0.0, 0.0, 16.0, 1.5, 16.0, 1 ],
+                [ -10.0, 2.5, 16.0, 7.0, 1.2, 7.0, 3 ],
+                [  10.0, 2.5, 16.0, 7.0, 1.2, 7.0, 3 ],
+                [ 0.0, 4.5, 28.0, 12.0, 1.5, 12.0, 1 ],
+                [ -8.0, 7.0, 42.0, 6.0, 1.0, 6.0, 2 ],
+                [  8.0, 9.5, 54.0, 6.0, 1.0, 6.0, 2 ],
+                [ 0.0, 12.0, 68.0, 18.0, 2.0, 18.0, 1 ]
+            ]
 
-            # Fast Sky Cloud Moving Platforms
-            movingPlatforms + [ 0.0, 5.5, 38.0, 5.5, 0.8, 5.5, 4, "z", 6.5, 2.4, 0.0, 0.0, 5.5, 38.0 ]
-            movingPlatforms + [ 0.0, 8.5, 52.0, 5.0, 0.8, 5.0, 4, "x", 6.0, 2.2, 1.5, 0.0, 8.5, 52.0 ]
-            movingPlatforms + [ 0.0, 10.5, 60.0, 4.5, 0.8, 4.5, 4, "y", 3.5, 1.8, 3.0, 0.0, 10.5, 60.0 ]
+            movingPlatforms = [
+                [ 0.0, 5.5, 38.0, 5.5, 0.8, 5.5, 4, "z", 6.5, 2.4, 0.0, 0.0, 5.5, 38.0 ],
+                [ 0.0, 8.5, 52.0, 5.0, 0.8, 5.0, 4, "x", 6.0, 2.2, 1.5, 0.0, 8.5, 52.0 ],
+                [ 0.0, 10.5, 60.0, 4.5, 0.8, 4.5, 4, "y", 3.5, 1.8, 3.0, 0.0, 10.5, 60.0 ]
+            ]
 
-            # Clouds & High Sky Decor
-            clouds + [ -18.0, -1.0, 10.0, 5.5, 1.5 ]
-            clouds + [  18.0, 1.0, 30.0, 6.0, 1.8 ]
-            clouds + [ -12.0, 5.0, 50.0, 7.0, 2.0 ]
-            clouds + [  15.0, 8.0, 65.0, 6.5, 1.6 ]
+            clouds = [
+                [ -18.0, -1.0, 10.0, 5.5, 1.5 ],
+                [  18.0, 1.0, 30.0, 6.0, 1.8 ],
+                [ -12.0, 5.0, 50.0, 7.0, 2.0 ],
+                [  15.0, 8.0, 65.0, 6.5, 1.6 ]
+            ]
 
-            # Pipe Piranha
-            pipes + [ 0.0, 4.5, 28.0, 1.3, 2.5, 0.0, 0.0, 0.0, false ]
+            pipes = [
+                [ 0.0, 4.5, 28.0, 1.3, 2.5, 0.0, 0.0, 0.0, false ]
+            ]
 
-            # Blocks & Starman
-            blocks + [ 0.0, 3.5, 0.0, 1, false, 0.0, 0.0, 2 ]   # Super Mushroom
-            blocks + [ 0.0, 8.0, 28.0, 1, false, 0.0, 0.0, 3 ]  # Starman!
-            blocks + [ -3.0, 16.0, 68.0, 1, false, 0.0, 0.0, 1 ]
-            blocks + [  3.0, 16.0, 68.0, 1, false, 0.0, 0.0, 1 ]
+            blocks = [
+                [ 0.0, 3.5, 0.0, 1, false, 0.0, 0.0, 2 ],
+                [ 0.0, 8.0, 28.0, 1, false, 0.0, 0.0, 3 ],
+                [ -3.0, 16.0, 68.0, 1, false, 0.0, 0.0, 1 ],
+                [  3.0, 16.0, 68.0, 1, false, 0.0, 0.0, 1 ]
+            ]
 
-            # Golden Rings of Coins
-            for a = 0 to 7
-                ang = a * 45.0 * DEG2RAD
-                coins + [ cos(ang) * 4.5, 6.0, 28.0 + sin(ang) * 4.5, false, a * 0.4 ]
-            next
-            for a = 0 to 7
-                ang = a * 45.0 * DEG2RAD
-                coins + [ cos(ang) * 6.0, 14.5, 68.0 + sin(ang) * 6.0, false, a * 0.3 ]
-            next
+            coins = [
+                [  4.50,  6.0, 28.00, false, 0.0 ],
+                [  3.18,  6.0, 31.18, false, 0.4 ],
+                [  0.00,  6.0, 32.50, false, 0.8 ],
+                [ -3.18,  6.0, 31.18, false, 1.2 ],
+                [ -4.50,  6.0, 28.00, false, 1.6 ],
+                [ -3.18,  6.0, 24.82, false, 2.0 ],
+                [  0.00,  6.0, 23.50, false, 2.4 ],
+                [  3.18,  6.0, 24.82, false, 2.8 ],
+                [  6.00, 14.5, 68.00, false, 0.0 ],
+                [  4.24, 14.5, 72.24, false, 0.3 ],
+                [  0.00, 14.5, 74.00, false, 0.6 ],
+                [ -4.24, 14.5, 72.24, false, 0.9 ],
+                [ -6.00, 14.5, 68.00, false, 1.2 ],
+                [ -4.24, 14.5, 63.76, false, 1.5 ],
+                [  0.00, 14.5, 62.00, false, 1.8 ],
+                [  4.24, 14.5, 63.76, false, 2.1 ]
+            ]
+
+            mushrooms = []
+            flowers   = []
+            trees     = []
+            fireBars  = []
 
             checkpointPos = Vector3(0.0, 5.5, 28.0)
             flagpolePos   = Vector3(0.0, 13.5, 74.0)
@@ -543,7 +572,7 @@ class MarioWorld
     end
 
     func resolveMarioCollision oldPos, newX, newY, newZ, vel, currentScale, isSuper
-        marioRadius = 0.55 * currentScale
+        marioRadius = 0.50 * currentScale
         marioHeight = 1.35 * currentScale
 
         resX = newX
@@ -554,7 +583,7 @@ class MarioWorld
         resVz = vel.z
         isGrounded = false
 
-        # 1. Static Platforms (AABB)
+        # 1. Static Platforms (Landing, Step-Up & Solid Wall Push-Out)
         for p = 1 to len(platforms)
             plat = platforms[p]
             minX = plat[1] - plat[4] / 2.0
@@ -566,10 +595,38 @@ class MarioWorld
 
             if resX + marioRadius > minX and resX - marioRadius < maxX and
                resZ + marioRadius > minZ and resZ - marioRadius < maxZ
-                if oldPos.y >= (maxY - 0.35) and resY <= (maxY + 0.15)
+
+                # Top Landing Surface: feet between (maxY - 0.70) and (maxY + 0.50)
+                if (resY <= maxY + 0.50) and (resY >= maxY - 0.70) and (resVy <= 1.0)
                     resY = maxY
                     resVy = 0.0
                     isGrounded = true
+                elseif resY < (maxY - 0.70) and (resY + marioHeight) > minY
+                    # Side Cliff Collision: push Mario back out along shallowest axis
+                    penLeft  = (resX + marioRadius) - minX
+                    penRight = maxX - (resX - marioRadius)
+                    penNear  = (resZ + marioRadius) - minZ
+                    penFar   = maxZ - (resZ - marioRadius)
+
+                    minPen = penLeft
+                    axis = 1
+                    if penRight < minPen minPen = penRight axis = 2 ok
+                    if penNear  < minPen minPen = penNear  axis = 3 ok
+                    if penFar   < minPen minPen = penFar   axis = 4 ok
+
+                    if axis = 1
+                        resX = minX - marioRadius
+                        if resVx > 0.0 resVx = 0.0 ok
+                    elseif axis = 2
+                        resX = maxX + marioRadius
+                        if resVx < 0.0 resVx = 0.0 ok
+                    elseif axis = 3
+                        resZ = minZ - marioRadius
+                        if resVz > 0.0 resVz = 0.0 ok
+                    elseif axis = 4
+                        resZ = maxZ + marioRadius
+                        if resVz < 0.0 resVz = 0.0 ok
+                    ok
                 ok
             ok
         next
@@ -586,7 +643,7 @@ class MarioWorld
 
             if resX + marioRadius > minX and resX - marioRadius < maxX and
                resZ + marioRadius > minZ and resZ - marioRadius < maxZ
-                if oldPos.y >= (maxY - 0.45) and resY <= (maxY + 0.35)
+                if (resY <= maxY + 0.55) and (resY >= maxY - 0.75) and (resVy <= 1.5)
                     resY = maxY
                     resVy = 0.0
                     isGrounded = true
@@ -777,12 +834,17 @@ class MarioWorld
             ok
         next
 
+        camYaw = 0.0
+        if cam != null and cam.yaw != null
+            camYaw = cam.yaw
+        ok
+
         # 8. Bouncing Bonus Coins
         for bc = 1 to len(bouncingCoins)
             bcoin = bouncingCoins[bc]
             bcy = bcoin[2]
-            if texMgr != null and texMgr.texCoin != null and cam != null
-                texMgr.drawBillboardSafe(cam.camera, texMgr.texCoin, Vector3(bcoin[1], bcy, bcoin[3]), 1.1, WHITE)
+            if texMgr != null
+                texMgr.drawItemCoin(Vector3(bcoin[1], bcy, bcoin[3]), 1.1, curTime * 240.0)
             else
                 DrawCylinder(Vector3(bcoin[1], bcy, bcoin[3]), 0.42, 0.42, 0.12, 16, GOLD_SHINE)
             ok
@@ -797,16 +859,18 @@ class MarioWorld
             pute = pu[7]
 
             if pute = 2 # Super Mushroom
-                if texMgr != null and texMgr.texMushroom != null and cam != null
-                    texMgr.drawBillboardSafe(cam.camera, texMgr.texMushroom, Vector3(pux, puy + 0.35, puz), 1.25, WHITE)
+                if texMgr != null
+                    texMgr.drawItemMushroom(Vector3(pux, puy, puz), 1.25, curTime * 100.0)
                 else
-                    DrawSphere(Vector3(pux, puy + 0.28, puz), 0.45, MARIO_RED)
+                    DrawCylinder(Vector3(pux, puy + 0.12, puz), 0.22, 0.22, 0.25, 12, CASTLE_WHITE)
+                    DrawSphere(Vector3(pux, puy + 0.35, puz), 0.42, MARIO_RED)
                 ok
             elseif pute = 3 # Starman
-                if texMgr != null and texMgr.texStar != null and cam != null
-                    texMgr.drawBillboardSafe(cam.camera, texMgr.texStar, Vector3(pux, puy + 0.35, puz), 1.35, WHITE)
+                if texMgr != null
+                    texMgr.drawItemStar(Vector3(pux, puy, puz), 1.35, curTime * 180.0)
                 else
-                    DrawSphere(Vector3(pux, puy + 0.25, puz), 0.40, MARIO_YELLOW)
+                    DrawSphere(Vector3(pux, puy + 0.35, puz), 0.38, GOLD_SHINE)
+                    DrawCube(Vector3(pux, puy + 0.35, puz), 0.55, 0.55, 0.15, GOLD_SHINE)
                 ok
             ok
         next
@@ -817,9 +881,10 @@ class MarioWorld
             if not coin[4]
                 coinBob = sin(curTime * 3.5 + coin[5]) * 0.12
                 cy = coin[2] + coinBob
+                coinRot = (curTime * 140.0 + coin[5] * RAD2DEG) % 360.0
 
-                if texMgr != null and texMgr.texCoin != null and cam != null
-                    texMgr.drawBillboardSafe(cam.camera, texMgr.texCoin, Vector3(coin[1], cy, coin[3]), 0.95, WHITE)
+                if texMgr != null
+                    texMgr.drawItemCoin(Vector3(coin[1], cy, coin[3]), 0.95, coinRot)
                 else
                     cThickness = 0.12
                     cRadius    = 0.38
@@ -901,17 +966,14 @@ class MarioWorld
         # Spinning 3D Golden Power Star
         starBob = sin(curTime * 3.0) * 0.35
         sy = starPos.y + starBob
+        DrawSphere(Vector3(starPos.x, sy, starPos.z), 0.45, GOLD_SHINE)
 
-        if texMgr != null and texMgr.texStar != null and cam != null
-            texMgr.drawBillboardSafe(cam.camera, texMgr.texStar, Vector3(starPos.x, sy, starPos.z), 2.5, WHITE)
-            DrawSphere(Vector3(starPos.x, sy, starPos.z), 0.45, RAYLibColor(255, 235, 80, 150))
+        if texMgr != null
+            texMgr.drawItemStar(Vector3(starPos.x, sy, starPos.z), 2.2, curTime * 120.0)
         else
-            starAngle = curTime * 120.0
-            starRad = starAngle * DEG2RAD
             DrawSphere(Vector3(starPos.x, sy, starPos.z), 0.75, MARIO_YELLOW)
-            DrawSphere(Vector3(starPos.x, sy, starPos.z), 0.45, GOLD_SHINE)
             for sp = 0 to 4
-                pAng = starRad + (sp * 72.0) * DEG2RAD
+                pAng = (curTime * 120.0 + (sp * 72.0)) * DEG2RAD
                 ptX = starPos.x + cos(pAng) * 0.85
                 ptZ = starPos.z + sin(pAng) * 0.85
                 DrawSphere(Vector3(ptX, sy, ptZ), 0.32, MARIO_YELLOW)
@@ -920,36 +982,36 @@ class MarioWorld
     end
 
     func drawPlatformModel px, py, pz, sx, sy, sz, pt, texMgr
-        # 1. Base / Sides
-        if pt = 4 and texMgr != null
+        if (pt = 4 or pt = 2) and texMgr != null
             texMgr.drawPlatformBase(Vector3(px, py, pz), sx, sy, sz, pt)
             return
-        elseif texMgr != null
-            texMgr.drawPlatformBase(Vector3(px, py - 0.1, pz), sx, sy - 0.2, sz, pt)
+        ok
+
+        # 1. Base / Cliff Sides
+        grassH = 0.24
+        baseH  = sy - grassH
+        baseY  = py - grassH / 2.0
+
+        if texMgr != null
+            texMgr.drawPlatformBase(Vector3(px, baseY, pz), sx, baseH, sz, pt)
         else
             sideCol = DIRT_BROWN
             if pt = 2 sideCol = STONE_DARK ok
             if pt = 3 sideCol = CASTLE_WHITE ok
-            DrawCube(Vector3(px, py - 0.1, pz), sx, sy - 0.2, sz, sideCol)
+            DrawCube(Vector3(px, baseY, pz), sx, baseH, sz, sideCol)
         ok
 
-        # 2. Top Surface
-        grassH = 0.28
+        # 2. Top Surface & Perimeter Rim
         grassY = py + sy / 2.0 - grassH / 2.0
 
-        if pt = 1
+        if pt = 1 # Grass Platform
+            DrawCube(Vector3(px, grassY, pz), sx + 0.10, grassH, sz + 0.10, GRASS_GREEN)
             if texMgr != null
-                texMgr.drawPlatformGrass(Vector3(px, grassY, pz), sx + 0.1, grassH, sz + 0.1)
-            else
-                DrawCube(Vector3(px, grassY, pz), sx + 0.1, grassH, sz + 0.1, GRASS_GREEN)
+                texMgr.drawPlatformGrass(Vector3(px, grassY, pz), sx + 0.10, grassH, sz + 0.10)
             ok
-        elseif pt = 2
-            if texMgr != null
-                texMgr.drawPlatformBase(Vector3(px, grassY, pz), sx + 0.12, grassH, sz + 0.12, 2)
-            else
-                DrawCube(Vector3(px, grassY, pz), sx + 0.12, grassH, sz + 0.12, STONE_LIGHT)
-            ok
-        elseif pt = 3
+        elseif pt = 2 # Stone Platform Fallback
+            DrawCube(Vector3(px, grassY, pz), sx + 0.10, grassH, sz + 0.10, STONE_BASE)
+        elseif pt = 3 # Mushroom Platform
             DrawCube(Vector3(px, grassY, pz), sx + 0.15, grassH, sz + 0.15, MARIO_RED)
             DrawSphere(Vector3(px, grassY + 0.1, pz), 0.65, WHITE)
         ok

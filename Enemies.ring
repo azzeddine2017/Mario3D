@@ -7,41 +7,33 @@
 # 1. Classic Goomba Enemy (True 3D Locomotion & Rotation)
 # -------------------------------------------------------------------
 class GoombaEnemy
-    pos
-    vel
-    startPos
-    patrolDistance
-    patrolSpeed
-    moveDir             # 1 or -1 along patrolAxis
-    patrolAxis          # "x" or "z"
-    facingAngle         # Orientation in degrees
+    pos            = null
+    vel            = null
+    startPos       = null
+    patrolDistance = 0.0
+    patrolSpeed    = 0.0
+    moveDir        = 1.0        # 1 or -1 along patrolAxis
+    patrolAxis     = "x"        # "x" or "z"
+    facingAngle    = 0.0        # Orientation in degrees
 
-    radius
-    height
+    radius         = 0.65
+    height         = 1.1
 
-    isAlive
-    isSquashed
-    squashTimer
-    squashDuration
+    isAlive        = true
+    isSquashed     = false
+    squashTimer    = 0.0
+    squashDuration = 0.65
 
-    walkTimer
+    walkTimer      = 0.0
 
     func init x, y, z, axis, dist, spd
-        pos             = Vector3(x, y, z)
-        vel             = Vector3(0, 0, 0)
-        startPos        = Vector3(x, y, z)
-        patrolAxis      = axis
-        patrolDistance  = dist
-        patrolSpeed     = spd
-        facingAngle     = 0.0
-        radius          = 0.65
-        height          = 1.1
-        isAlive         = true
-        isSquashed      = false
-        squashTimer     = 0.0
-        squashDuration  = 0.65
-        walkTimer       = (x * 3.7 + z * 2.1) % 6.28
-        moveDir         = 1.0
+        pos            = Vector3(x, y, z)
+        vel            = Vector3(0, 0, 0)
+        startPos       = Vector3(x, y, z)
+        patrolAxis     = axis
+        patrolDistance = dist
+        patrolSpeed    = spd
+        walkTimer      = (x * 3.7 + z * 2.1) % 6.28
         return self
     end
 
@@ -187,45 +179,34 @@ end
 # 2. Green Koopa Troopa (Retractable Shell & Kick Physics)
 # -------------------------------------------------------------------
 class KoopaEnemy
-    pos
-    vel
-    startPos
-    patrolDistance
-    patrolSpeed
-    moveDir
-    patrolAxis
-    facingAngle
+    pos            = null
+    vel            = null
+    startPos       = null
+    patrolDistance = 0.0
+    patrolSpeed    = 0.0
+    moveDir        = 1.0
+    patrolAxis     = "x"
+    facingAngle    = 0.0
 
-    radius
-    height
+    radius         = 0.68
+    height         = 1.35
 
-    isAlive
-    isShell
-    shellSpeed
-    shellDirX
-    shellDirZ
-    shellSpin
+    isAlive        = true
+    isShell        = false
+    shellSpeed     = 0.0
+    shellDirX      = 0.0
+    shellDirZ      = 0.0
+    shellSpin      = 0.0
 
-    walkTimer
+    walkTimer      = 0.0
 
     func init x, y, z, axis, dist, spd
-        pos             = Vector3(x, y, z)
-        vel             = Vector3(0, 0, 0)
-        startPos        = Vector3(x, y, z)
-        patrolAxis      = axis
-        patrolDistance  = dist
-        patrolSpeed     = spd
-        facingAngle     = 0.0
-        radius          = 0.68
-        height          = 1.35
-        isAlive         = true
-        isShell         = false
-        shellSpeed      = 0.0
-        shellDirX       = 0.0
-        shellDirZ       = 0.0
-        shellSpin       = 0.0
-        walkTimer       = 0.0
-        moveDir         = 1.0
+        pos            = Vector3(x, y, z)
+        vel            = Vector3(0, 0, 0)
+        startPos       = Vector3(x, y, z)
+        patrolAxis     = axis
+        patrolDistance = dist
+        patrolSpeed    = spd
         return self
     end
 
@@ -367,28 +348,21 @@ end
 # 3. Piranha Plant (Warp Pipe Ambush Enemy)
 # -------------------------------------------------------------------
 class PiranhaPlant
-    pos
-    baseY
-    pipeHeight
-    heightOffset
-    jawAngle
-    timer
-    isAlive
-    isEmerged
-    radius
-    height
+    pos          = null
+    baseY        = 0.0
+    pipeHeight   = 0.0
+    heightOffset = 0.0
+    jawAngle     = 0.0
+    timer        = 0.0
+    isAlive      = true
+    isEmerged    = false
+    radius       = 0.8
+    height       = 1.5
 
     func init x, y, z, pHeight
-        pos         = Vector3(x, y, z)
-        baseY       = y
-        pipeHeight  = pHeight
-        heightOffset = 0.0
-        jawAngle    = 0.0
-        timer       = 0.0
-        isAlive     = true
-        isEmerged   = false
-        radius      = 0.8
-        height      = 1.5
+        pos        = Vector3(x, y, z)
+        baseY      = y
+        pipeHeight = pHeight
         return self
     end
 
@@ -462,22 +436,18 @@ end
 # 4. Thwomp Enemy (Slamming Trap Stone)
 # -------------------------------------------------------------------
 class ThwompEnemy
-    pos
-    startY
-    targetGroundY
-    state
-    restTimer
-    radius
-    height
+    pos           = null
+    startY        = 0.0
+    targetGroundY = 0.0
+    state         = 0
+    restTimer     = 0.0
+    radius        = 1.5
+    height        = 2.2
 
     func init x, y, z, groundY
         pos           = Vector3(x, y, z)
         startY        = y
         targetGroundY = groundY
-        state         = 0
-        restTimer     = 0.0
-        radius        = 1.5
-        height        = 2.2
         return self
     end
 

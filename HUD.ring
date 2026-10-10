@@ -162,7 +162,7 @@ class MarioHUD
     end
 
     func drawControlsBar
-        barW = 840
+        barW = 940
         barH = 30
         barX = (SCREEN_WIDTH - barW) / 2
         barY = SCREEN_HEIGHT - barH - 12
@@ -170,7 +170,7 @@ class MarioHUD
         DrawRectangle(barX, barY, barW, barH, RAYLibColor(15, 20, 35, 200))
         DrawRectangleLines(barX, barY, barW, barH, RAYLibColor(90, 120, 180, 150))
 
-        guideText = "WASD / ZQSD / Arrows: Move | SPACE: Jump (x3) | CTRL/C: Ground Pound | SHIFT: Dash | S: Pipe"
+        guideText = "WASD/Arrows: Move | SPACE: Jump (x3) | SHIFT: Dash | C/CTRL: Ground Pound | Q/E/RMB: Cam | R: Cam Reset"
         tw = MeasureText(guideText, 13)
         tx = barX + (barW - tw) / 2
         DrawText(guideText, tx, barY + 9, 13, RAYLibColor(220, 235, 255, 230))

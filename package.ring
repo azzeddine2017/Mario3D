@@ -1,7 +1,7 @@
 aPackageInfo = [
-    :name = "Mario3D",
-    :description = "Super Mario 3D - Mushroom Kingdom 3D Platformer Adventure using RingRayLib",
-    :folder = "Mario3D",
+    :name = "Mario3D_Sample",
+    :description = "Super Mario 3D Sample - Mushroom Kingdom 3D Platformer using RingRayLib",
+    :folder = "Mario3D_Sample",
     :developer = "Azzeddine2017",
     :email = "azzeddine.remmal@gmail.com",
     :license = "MIT License",
